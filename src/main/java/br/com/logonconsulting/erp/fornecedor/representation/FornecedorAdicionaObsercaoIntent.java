@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class FornecedorUpdateIntent {
-    private String nome;
+public class FornecedorAdicionaObsercaoIntent {
+    private String obsercacao;
 
     public Fornecedor updateEntity(Fornecedor entity){
-        return entity.toBuilder()
-                .nome(this.nome)
-                .build();
+        entity.getObsercacoes().add(ObservacoesFornecedor.builder().observacao(this.obsercacao).build());
+        return entity;
 
     }
 }

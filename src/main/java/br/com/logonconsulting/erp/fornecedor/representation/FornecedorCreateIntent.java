@@ -4,6 +4,8 @@ import br.com.logonconsulting.erp.fornecedor.model.Fornecedor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+
 @NoArgsConstructor
 @Getter
 public class FornecedorCreateIntent {
@@ -14,6 +16,7 @@ public class FornecedorCreateIntent {
         return Fornecedor.builder()
                 .nome(this.nome)
                 .cnpj(this.cnpj)
+                .obsercacoes(Collections.emptyList())
                 .build();
     }
 }

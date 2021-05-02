@@ -1,9 +1,7 @@
 package br.com.logonconsulting.erp.fornecedor;
 
 import br.com.logonconsulting.erp.fornecedor.model.Fornecedor;
-import br.com.logonconsulting.erp.fornecedor.representation.FornecedorCreateIntent;
-import br.com.logonconsulting.erp.fornecedor.representation.FornecedorDto;
-import br.com.logonconsulting.erp.fornecedor.representation.FornecedorUpdateIntent;
+import br.com.logonconsulting.erp.fornecedor.representation.*;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +74,37 @@ public class FornecedorController {
         return ResponseEntity.ok(FornecedorDto.toRepresentation(persisted));
     }
 
+    @PostMapping("{id}/observacao")
+    @NotFound(action = NotFoundAction.IGNORE)
+    public ResponseEntity<ObservacoesFornecedorDto> createObsercacao(@PathVariable("id") Long id, @RequestBody FornecedorUpdateIntent updateIntent) {
+        Optional<ObservacoesFornecedorDto> body = repository.findById(id)
+                .map(updateIntent::updateEntity)
+                .map(repository::save)
+                .map(ObservacoesFornecedorDto::toRepresentation);
+        return ResponseEntity.of(body);
+    }
+
+    @PutMapping("{fornecedorId}/observacao/{obsercacaoId}")
+    @NotFound(action = NotFoundAction.IGNORE)
+    public ResponseEntity<ObservacoesFornecedorDto> updateObsercacao(@PathVariable("fornecedorId") Long fornecedorId,
+                                                                     @PathVariable("obsercacaoId") Long obsercacaoId,
+                                                                     @RequestBody ObsercacaoFornecedorUpdateIntent updateIntent) {
+        Optional<ObservacoesFornecedorDto> body = repository.findById(fornecedorId)
+                .map(fornecedor -> updateIntent.updateEntity(obsercacaoId, fornecedor))
+                .map(repository::save)
+                .map(ObservacoesFornecedorDto::toRepresentation);
+        return ResponseEntity.of(body);
+    }
+
+    @DeleteMapping("{fornecedorId}/observacao/{obsercacaoId}")
+    @NotFound(action = NotFoundAction.IGNORE)
+    public ResponseEntity<ObservacoesFornecedorDto> updateObsercacao(@PathVariable("fornecedorId") Long fornecedorId,
+                                                                     @PathVariable("obsercacaoId") Long obsercacaoId) {
+        Optional<ObservacoesFornecedorDto> body = repository.findById(fornecedorId)
+                .map(fornecedor -> ObsercacaoFornecedorDeleteIntent.updateEntity(obsercacaoId, fornecedor))
+                .map(repository::save)
+                .map(ObservacoesFornecedorDto::toRepresentation);
+        return ResponseEntity.of(body);
+    }
 
 }

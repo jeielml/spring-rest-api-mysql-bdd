@@ -3,6 +3,11 @@ package br.com.logonconsulting.erp.fornecedor.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.sql.rowset.serial.SerialArray;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -13,7 +18,7 @@ import javax.persistence.*;
 @ToString
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = {"id"})
-public class Fornecedor {
+public class Fornecedor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +27,12 @@ public class Fornecedor {
 
     @Column(length = 14)
     private String cnpj;
+
+    @Builder.Default
+    private long criado_em = System.currentTimeMillis();
+
+    @OneToMany
+    @Singular(value = "obsercacao")
+    private Set<ObservacoesFornecedor> obsercacoes;
+
 }
