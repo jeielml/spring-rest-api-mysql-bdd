@@ -1,10 +1,16 @@
 package br.com.logonconsulting.erp.fornecedor.model;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.sql.rowset.serial.SerialArray;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +24,7 @@ import java.util.Set;
 @ToString
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = {"id"})
+@EntityListeners(AuditingEntityListener.class)
 public class Fornecedor implements Serializable {
 
     @Id
@@ -34,5 +41,18 @@ public class Fornecedor implements Serializable {
     @OneToMany
     @Singular(value = "obsercacao")
     private Set<ObservacoesFornecedor> obsercacoes;
+
+    @CreatedBy
+    private String createdBy;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @LastModifiedBy
+    private String lastModifiedBy;
+
+    @Getter
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
 
 }
