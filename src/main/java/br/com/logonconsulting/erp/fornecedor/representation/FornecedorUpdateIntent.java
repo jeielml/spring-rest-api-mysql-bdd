@@ -11,11 +11,10 @@ import lombok.NoArgsConstructor;
 public class FornecedorUpdateIntent {
     private String nome;
 
-    /***
-     * TODO: usar builder da entidade
-     * @param entity
-     */
-    public void updateEntity(Fornecedor entity){
-        entity.setNome(this.nome);
+    public Fornecedor updateEntity(Fornecedor entity){
+        return entity.toBuilder()
+                .nome(this.nome)
+                .build();
+
     }
 }

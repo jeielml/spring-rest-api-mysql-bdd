@@ -11,14 +11,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @ToString
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode(of = {"id"})
 public class Fornecedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Setter
     private String nome;
 
     @Column(length = 14)

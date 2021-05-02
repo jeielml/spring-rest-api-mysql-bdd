@@ -62,10 +62,8 @@ public class FornecedorController {
     @NotFound(action = NotFoundAction.IGNORE)
     public ResponseEntity<FornecedorDto> update(@PathVariable("id") Long id, @RequestBody FornecedorUpdateIntent updateIntent) {
         Optional<FornecedorDto> body = repository.findById(id)
-                .map(fornecedor -> {
-                    updateIntent.updateEntity(fornecedor);
-                    return repository.save(fornecedor);
-                })
+                .map(updateIntent::updateEntity)
+                .map(repository::save)
                 .map(FornecedorDto::toRepresentation);
         return ResponseEntity.of(body);
     }
