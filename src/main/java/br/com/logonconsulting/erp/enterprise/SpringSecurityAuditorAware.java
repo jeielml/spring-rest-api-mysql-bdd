@@ -2,6 +2,7 @@ package br.com.logonconsulting.erp.enterprise;
 
 import org.springframework.data.domain.AuditorAware;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class SpringSecurityAuditorAware implements AuditorAware<String> {
@@ -15,6 +16,6 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
 //
 //        return ((MyUserDetails) authentication.getPrincipal()).getUser();
 //
-        return Optional.of("jeielml");
+        return Optional.of("jeielml".concat(LocalDateTime.now().toString()));
     }
 }
