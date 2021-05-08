@@ -5,6 +5,9 @@ import br.com.logonconsulting.erp.fornecedor.representation.*;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +32,19 @@ public class FornecedorController {
     private FornecedorRepository repository;
 //    private FornecedorMockedRepository repository;
 
-
     @ResponseStatus(OK)
-    @GetMapping
-    public ResponseEntity<List<FornecedorDto>> findAll() {
-        List<FornecedorDto> fornecedores = StreamSupport.stream(this.repository.findAll().spliterator(), false)
-                .map(FornecedorDto::toRepresentation)
+    @GetMapping(params = {"page", "size"})
+    public ResponseEntity<Page<FornecedorDto>> findAll(@RequestParam("page") int page,
+                                                       @RequestParam("size") int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+
+        Page<Fornecedor> fornecedorPage = this.repository.findAll(pageable);
+        List<FornecedorDto> pageDto = fornecedorPage.getContent().stream().map(FornecedorDto::toRepresentation)
                 .collect(Collectors.toUnmodifiableList());
-        return ResponseEntity.ok(fornecedores);
+
+        Page<FornecedorDto> pages
+                = new PageImpl<>(pageDto, pageable, fornecedorPage.getTotalElements());
+        return ResponseEntity.ok(pages);
     }
 
     @ResponseStatus(OK)
