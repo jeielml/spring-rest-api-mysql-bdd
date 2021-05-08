@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,15 +34,11 @@ public class FornecedorController {
 //    private FornecedorMockedRepository repository;
 
     @ResponseStatus(OK)
-    @GetMapping(params = {"page", "size"})
-    public ResponseEntity<Page<FornecedorDto>> findAll(@RequestParam("page") int page,
-                                                       @RequestParam("size") int size) {
-        PageRequest pageable = PageRequest.of(page, size);
-
+    @GetMapping
+    public ResponseEntity<Page<FornecedorDto>> findAll(Pageable pageable) {
         Page<Fornecedor> fornecedorPage = this.repository.findAll(pageable);
         List<FornecedorDto> pageDto = fornecedorPage.getContent().stream().map(FornecedorDto::toRepresentation)
                 .collect(Collectors.toUnmodifiableList());
-
         Page<FornecedorDto> pages
                 = new PageImpl<>(pageDto, pageable, fornecedorPage.getTotalElements());
         return ResponseEntity.ok(pages);
